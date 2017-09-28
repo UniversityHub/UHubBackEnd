@@ -30,3 +30,6 @@ https://www.youtube.com/watch?v=JYGLm7r_EI4
 ///////////
 //MONGODB//
 ///////////
+
+Connect nodeJS to DB:
+https://docs.mongodb.com/getting-started/node/client/
