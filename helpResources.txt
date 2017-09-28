@@ -1,8 +1,15 @@
 ///////////
 //EXPRESS//
 ///////////
+
 Simple, how to get JSON
 https://www.kompulsa.com/how-to-accept-and-parse-post-requests-in-node-js/
+
+Fixed any issue with the above ^^^^ tutorial:
+https://stackoverflow.com/questions/24543847/req-body-empty-on-posts
+
+Simple JSON functions in nodeJS:
+http://codesamplez.com/programming/using-json-in-node-js-javascript
 
 Simple tutorial, covers basics of Express: 
 https://www.tutorialspoint.com/nodejs/nodejs_express_framework.htm
