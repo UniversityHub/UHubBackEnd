@@ -1,0 +1,17 @@
+Sending Login to Server:
+{
+  "username": "",
+  "password": ""
+}
+
+Full UserData in Server:
+{
+  "name":"",
+  "username":"",
+  "password":"",
+  "blackboardUsername":"",
+  "blackboardPasswrod":"",
+  "mailUsername":"",
+  "mailPassword":"",
+  "friendListID":"".
+}
