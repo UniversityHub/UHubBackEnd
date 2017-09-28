@@ -1,0 +1,25 @@
+///////////
+//EXPRESS//
+///////////
+Simple, how to get JSON
+https://www.kompulsa.com/how-to-accept-and-parse-post-requests-in-node-js/
+
+Simple tutorial, covers basics of Express: 
+https://www.tutorialspoint.com/nodejs/nodejs_express_framework.htm
+
+//////////
+//NODEJS//
+//////////
+
+Intro to node.js: 
+https://www.w3schools.com/nodejs/nodejs_intro.asp
+
+Intro to node.js with MongoDB: 
+https://www.w3schools.com/nodejs/nodejs_mongodb.asp
+
+Simple node.js to MongoDB Connect: 
+https://www.youtube.com/watch?v=JYGLm7r_EI4
+
+///////////
+//MONGODB//
+///////////
