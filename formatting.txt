@@ -1,7 +1,25 @@
+
+////////////////////////////////////////////////////////////
+//THIS IS THE FORMAT FOR ALL THE JSON DOCUMENTS TO BE SENT//
+////////////////////////////////////////////////////////////
+
 Sending Login to Server:
 {
   "username": "",
   "password": ""
+}
+
+Creating account:
+{
+ "name":"",
+ "username":"",
+ "password":"",
+ "blackboardUsername":"",
+ "blackboardPasswrod":"",
+ "mailUsername":"",
+ "mailPassword":"",
+ "googleUsername":"",
+ "googlePassword":"",
 }
 
 Full UserData in Server:
@@ -13,5 +31,22 @@ Full UserData in Server:
   "blackboardPasswrod":"",
   "mailUsername":"",
   "mailPassword":"",
-  "friendListID":"".
+  "googleUsername":"",
+  "googlePassword":"",
+  "todoListID":"",
+  "friendListID":"",
+  "resetID":"",
+  "currentToken":""
+}
+
+Formatting for a List (friends or todo):
+{
+  "ID":"",
+  "numElements":"N",
+  "element1":"",
+  "element2":"",
+  .
+  .
+  .
+  "elementN":""
 }
