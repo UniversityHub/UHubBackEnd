@@ -23,7 +23,7 @@ var server = app.listen(8081, function() {    //when you first start the server?
 
 app.post('/sendLogin', function (req,res) {
   console.log("Received a POST req for /sendLogin");
-  res.send("Just received req.");
+  //res.send("Just received req.");
 
   //console.log(req);
   var json = req.body;
@@ -37,12 +37,25 @@ app.post('/sendLogin', function (req,res) {
   var user = json['username'];
   var pass = json['password'];
 
+  var retrievedPass;
   MongoClient.connect(url,function(err,db) {
     assert.equal(null,err);
     console.log("Connected correctly to server.");
+    db.collection('users').findOne({ "username" : user }, function(err, result) {
+      if (err) throw err;
+      console.log(result['password']);
+      retrievedPass = result['password'];
 
+      if(retrievedPass != pass) {
+        console.log("wrong password");
+        res.send(false);
+      } else {
+        console.log("correct pass");
+        res.send(true);
+      }
+
+    })
     //db.collection('users').insertOne(json);
-
     db.close();
   })
 })
