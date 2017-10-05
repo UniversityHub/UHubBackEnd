@@ -4,21 +4,25 @@ var authHelper = require('./authHelper');
 var url = require('url');
 var microsoftGraph = require("@microsoft/microsoft-graph-client")
 
-
+//VARIABLES FOR THE DIFFERENT PAGES
 var handle = {};
 handle['/'] = home;
-handle['/authorize'] = authorize;
-handle['/mail'] = mail;
+handle['/authorize'] = authorize;   //WE NEVER REALLY CALL THIS
+handle['/mail'] = mail;             //WE NEVER REALLY CALL THIS
 
+//FOR npm start
 server.start(router.route, handle);
 
+//THIS IS THE HOME/SPLASH SCREEN
 function home(response, request) {
   console.log('Request handler \'home\' was called.');
   response.writeHead(200, {'Content-Type': 'text/html'});
    response.write('<p>Please <a href="' + authHelper.getAuthUrl() + '">sign in</a> with your Office 365 or Outlook.com account.</p>');
-  response.end();
+  //THE ABOVE LINE IS WHAT USES OUR APPID AND CODE, TO GET THE LINK TO THE LOGIN SCREEN ^^^^^
+   response.end();
 }
 
+//THIS IS CALLED WHEN RETURNING FROM THE LOGIN SCREEN
 function authorize(response, request) {
   console.log('Request handler \'authorize\' was called.');
 
@@ -26,9 +30,10 @@ function authorize(response, request) {
   var url_parts = url.parse(request.url, true);
   var code = url_parts.query.code;
   console.log('Code: ' + code);
-  authHelper.getTokenFromCode(code, tokenReceived, response);
+  authHelper.getTokenFromCode(code, tokenReceived, response);   //THIS JUST FORMATS THE STRING FOR THE TOKEN STUFF AND RESPONDS
 }
 
+//GET THE USERS EMAIL USING THE TOKEN RECEIVED FROM LOGIN
 function getUserEmail(token, callback) {
   // Create a Graph client
   var client = microsoftGraph.Client.init({
@@ -50,6 +55,7 @@ function getUserEmail(token, callback) {
     });
 }
 
+//THIS IS A CALLBACK FUNCTION BECAUSE GETTING THE EMAIL IS ASYNCH
 function tokenReceived(response, error, token) {
   if (error) {
     console.log('Access token error: ', error.message);
@@ -75,8 +81,9 @@ function tokenReceived(response, error, token) {
   }
 }
 
+//HELPER FUNCTION TO GET THE COOKIE VALUE STUFF
 function getValueFromCookie(valueName, cookie) {
-  if (cookie.indexOf(valueName) !== -1) {
+  if (cookie.indexOf(valueName) !== -1) {                         //THIS MUST MEAN THAT -1 IS BAD/NO COOKIE
     var start = cookie.indexOf(valueName) + valueName.length + 1;
     var end = cookie.indexOf(';', start);
     end = end === -1 ? cookie.length : end;
@@ -84,6 +91,7 @@ function getValueFromCookie(valueName, cookie) {
   }
 }
 
+//CHECK THE TOKEN RECEIVED FROM EMAIL, WILL REFRESH IF NECESSARY
 function getAccessToken(request, response, callback) {
   var expiration = new Date(parseFloat(getValueFromCookie('node-tutorial-token-expires', request.headers.cookie)));
 
@@ -109,10 +117,11 @@ function getAccessToken(request, response, callback) {
   }
 }
 
+//THIS IS THE ACTUAL MAIL API USE
 function mail(response, request) {
-  getAccessToken(request, response, function(error, token) {
+  getAccessToken(request, response, function(error, token) {    
     console.log('Token found in cookie: ', token);
-    var email = getValueFromCookie('node-tutorial-email', request.headers.cookie);
+    var email = getValueFromCookie('node-tutorial-email', request.headers.cookie);  //NOT EXACTLY SURE, BUT WE CAN CHANGE?
     console.log('Email found in cookie: ', email);
     if (token) {
       response.writeHead(200, {'Content-Type': 'text/html'});
@@ -128,11 +137,11 @@ function mail(response, request) {
 
       // Get the 10 newest messages
       client
-        .api('/me/mailfolders/inbox/messages')
-        .header('X-AnchorMailbox', email)
-        .top(10)
-        .select('subject,from,receivedDateTime,isRead')
-        .orderby('receivedDateTime DESC')
+        .api('/me/mailfolders/inbox/messages')      //THIS IS THE FOLDER IT GET EMAILS FROM
+        .header('X-AnchorMailbox', email)           //THIS IS WHY WE GOT EMAIL, FOR EFFICIENCY
+        .top(10)                                    //TOP = LIMITS TO FIRST 10 RESULTS
+        .select('subject,from,receivedDateTime,isRead')   //WHAT TO REQUEST FROM EACH EMAIL: SUBJECT, FROM, DATE, READ STATS
+        .orderby('receivedDateTime DESC')           //IN WHAT ORDER TO SHOW, RECEIVEDDATETIME DESC = NEWEST FIRST
         .get((err, res) => {
           if (err) {
             console.log('getMessages returned an error: ' + err);
