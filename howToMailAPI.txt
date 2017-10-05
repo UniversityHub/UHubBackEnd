@@ -4,5 +4,9 @@
 
 //HOPEFULLY THIS IS ALL WE NEED?//
 
+UHub app ID: 144ef094-6c6c-44ea-aad0-320c524ef96b
 UHub app password: yvQbOzk8iKFFfV0cMVPwEnj
 
+gotta run npm install simple-oauth2 --save
+
+gotta run npm install @microsoft/microsoft-graph-client es6-promise --save
