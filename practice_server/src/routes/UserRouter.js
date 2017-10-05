@@ -24,14 +24,81 @@ UserRouter.route('/add/post').post(function (req, res) {
     });
 });
 
-// Authenticate userInfo
-UserRouter.route('/sendLogin').post(function (req, res) {
+// Authenticate user with ID and Password
+UserRouter.route('/authenticate-password').post(function (req, res) {
   var info = req.body;
   var user = info['userID'];
   var pass = info['userPassword'];
 
   if(user === '') user = '123';
   UserInfo.find({ userID: user, userPassword: pass}, function (err, itms){
+    if(err){
+      console.log(err);
+    }
+    else {
+      res.json(itms);
+    }
+  });
+})
+
+// Authenticate user with ID and Email
+UserRouter.route('/authenticate-email').post(function (req, res) {
+  var info = req.body;
+  var user = info['userID'];
+  var email = info['userEmail'];
+
+  if(user === '') user = '123';
+  UserInfo.find({ userID: user, userEmail: email}, function (err, itms){
+    if(err){
+      console.log(err);
+    }
+    else {
+      res.json(itms);
+    }
+  });
+})
+
+//Check if email exists in database
+UserRouter.route('/check-email').post(function (req, res) {
+  var info = req.body;
+  var email = info['userEmail'];
+
+  UserInfo.find({userEmail: email}, function (err, itms){
+    if(err){
+      console.log(err);
+    }
+    else {
+      res.json(itms);
+    }
+  });
+})
+
+//Check if username exists in database
+UserRouter.route('/check-user').post(function (req, res) {
+  var info = req.body;
+  var user = info['userID'];
+
+  if(user === '') user = '123';
+  UserInfo.find({userID: user}, function (err, itms){
+    if(err){
+      console.log(err);
+    }
+    else {
+      res.json(itms);
+    }
+  });
+})
+
+// Revise password of specific UserID
+UserRouter.route('/revise-password').post(function (req, res) {
+  var info = req.body;
+  var user = info['userID'];
+  var pass = info['userPassword'];
+
+  if(user === '') user = '123';
+  var query = {userID: user};
+
+  UserInfo.findOneAndUpdate(query, { userPassword: pass }, function (err, itms){
     if(err){
       console.log(err);
     }
@@ -51,6 +118,31 @@ UserRouter.route('/').get(function (req, res) {
       res.json(itms);
     }
   });
+});
+
+
+var nodemailer = require('nodemailer');
+
+//Sends email to user
+UserRouter.route('/send-email').post(function (req, res) {
+      var sender = 'smtps://uhubcontact%40gmail.com';
+      var password = 'Uhubpassword';
+      var transporter = nodemailer.createTransport(sender + ':' + password + '@smtp.gmail.com');
+      let mailOptions = {
+          from: '"UniversityHub" <uhubcontact@gmail.com>', // sender address
+          to: req.body.to, // list of receivers
+          subject: req.body.subject, // Subject line
+          text: req.body.body, // plain text body
+          html: req.body.body, // html body
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message %s sent: %s', info.messageId, info.response);
+              res.render('index');
+          });
 });
 //
 // // Defined edit route

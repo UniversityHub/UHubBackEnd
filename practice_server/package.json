@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/UniversityHub/UHubBackEnd/issues"
   },
-  "homepage": "https://github.com/UniversityHub/UHubBackEnd#readme"
+  "homepage": "https://github.com/UniversityHub/UHubBackEnd#readme",
+  "dependencies": {
+    "@microsoft/microsoft-graph-client": "^1.0.0",
+    "es6-promise": "^4.1.1",
+    "nodemailer": "^4.1.2",
+    "simple-oauth2": "^1.3.0"
+  }
 }

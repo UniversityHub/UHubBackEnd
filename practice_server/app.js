@@ -18,6 +18,8 @@ mongoose.connect(url)
   })
 
 var UserRouter = require('./src/routes/UserRouter');
+var ToDoListRouter = require('./src/routes/ToDoListRouter');
+var EmailRouter = require('./src/routes/EmailRouter');
 
 // Use middlewares to set view engine and post json data to the server
 app.use(express.static('public'));
@@ -26,6 +28,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.use('/userInfos', UserRouter);
+app.use('/todoList', ToDoListRouter);
+
 
 app.listen(port, function(){
   console.log('Server is running on port: ' + port);
