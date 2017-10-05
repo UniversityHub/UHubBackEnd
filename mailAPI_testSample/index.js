@@ -9,6 +9,8 @@ var handle = {};
 handle['/'] = home;
 handle['/authorize'] = authorize;   //WE NEVER REALLY CALL THIS
 handle['/mail'] = mail;             //WE NEVER REALLY CALL THIS
+handle['/calendar'] = calendar;     //FOR CALENDAR: YOU GOTTA
+                                    //ACTUALLY GOTO '/CALENDAR'
 
 //FOR npm start
 server.start(router.route, handle);
@@ -169,3 +171,56 @@ function mail(response, request) {
     }
   });
 }
+
+//THIS CALLS THE CALENDAR API
+function calendar(response, request) {
+  getAccessToken(request, response, function(error, token) {
+    console.log('Token found in cookie: ', token);
+    var email = getValueFromCookie('node-tutorial-email', request.headers.cookie);
+    console.log('Email found in cookie: ', email);
+    if (token) {
+      response.writeHead(200, {'Content-Type': 'text/html'});
+response.write('<div><h1>Your calendar</h1></div>');
+
+// Create a Graph client
+var client = microsoftGraph.Client.init({
+  authProvider: (done) => {
+    // Just return the token
+    done(null, token);
+  }
+});
+
+// Get the 10 events with the greatest start date
+client
+  .api('/me/events')
+  .header('X-AnchorMailbox', email)
+  .top(10)
+  .select('subject,start,end')
+  .orderby('start/dateTime DESC')
+  .get((err, res) => {
+    if (err) {
+      console.log('getEvents returned an error: ' + err);
+      response.write('<p>ERROR: ' + err + '</p>');
+      response.end();
+    } else {
+      console.log('getEvents returned ' + res.value.length + ' events.');
+      response.write('<table><tr><th>Subject</th><th>Start</th><th>End</th><th>Attendees</th></tr>');
+      res.value.forEach(function(event) {
+        console.log('  Subject: ' + event.subject);
+        response.write('<tr><td>' + event.subject +
+          '</td><td>' + event.start.dateTime.toString() +
+          '</td><td>' + event.end.dateTime.toString() + '</td></tr>');
+      });
+
+      response.write('</table>');
+      response.end();
+    }
+  });
+    } else {
+      response.writeHead(200, {'Content-Type': 'text/html'});
+      response.write('<p> No token found in cookie!</p>');
+      response.end();
+    }
+  });
+}
+
