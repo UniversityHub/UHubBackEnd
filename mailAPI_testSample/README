@@ -2,11 +2,20 @@
 //HOW TO GET THE MAIL API TO WORK WITH OUR BACKEND//
 ////////////////////////////////////////////////////
 
-//HOPEFULLY THIS IS ALL WE NEED?//
+//HOPEFULLY THIS IS ALL WE NEED//
 
 UHub app ID: 144ef094-6c6c-44ea-aad0-320c524ef96b
 UHub app password: yvQbOzk8iKFFfV0cMVPwEnj
 
 gotta run npm install simple-oauth2 --save
-
 gotta run npm install @microsoft/microsoft-graph-client es6-promise --save
+
+File Descriptions:
+authHelper    : helper functions for all the authentification stuff
+index         : the big part: contains all the main functions and all
+                of the actions for each page. Calls authHelper
+package.json  : not totally sure, I believe its just a formatting thing
+router        : handles the routing betweenall the different pages when
+                requested
+server        : has the start functionality for the server and sets the
+                port stuff.
