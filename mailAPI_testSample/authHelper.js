@@ -22,6 +22,7 @@ var redirectUri = 'http://localhost:8000/authorize';
 var scopes = [ 'openid',            //THESE ARE THE PERMISSIONS THE 
                'offline_access',    //IS REQUESTING FROM OFFICE
                'User.Read',
+               'Calendars.Read'
                'Mail.Read' ];
 
 function getAuthUrl() {
