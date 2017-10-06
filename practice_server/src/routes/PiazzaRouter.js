@@ -19,6 +19,7 @@ var PiazzaInfo = require('../models/PiazzaInfo');
 PiazzaRouter.route('/').get(function (req, res) {
   PiazzaInfo.find(function (err, itms){
     if(err){
+      console.log('there is an error');
       console.log(err);
     }
     else {
@@ -27,23 +28,23 @@ PiazzaRouter.route('/').get(function (req, res) {
   });
 });
 
-//// Update Schools for specific User
-// PiazzaRouter.route('/save-schools').post(function (req, res) {
-//     var info = req.body;
-//     var user = info['userID'];
-//     var pass = info['userPassword'];
-//     var courseList = info['courseList'];
-//     console.log(courseList);
-//     var query = {userID: user, userPassword: pass};
-//     PiazzaInfo.findOneAndUpdate(query, { courseList: courseList }, function (err, itms){
-//       if(err){
-//         console.log(err);
-//       }
-//       else {
-//         res.json(itms);
-//       }
-//     });
-// });
+// Update Schools for specific User
+PiazzaRouter.route('/save-schools').post(function (req, res) {
+    var info = req.body;
+    var user = info['userID'];
+    var pass = info['userPassword'];
+    var courseList = info['courseList'];
+    console.log(courseList);
+    var query = {userID: user, userPassword: pass};
+    PiazzaInfo.findOneAndUpdate(query, { courseList: courseList }, function (err, itms){
+      if(err){
+        console.log(err);
+      }
+      else {
+        res.json(itms);
+      }
+    });
+});
 
 // Get Piazza information
 PiazzaRouter.route('/get-piazza').post(function (req, res) {
@@ -54,6 +55,8 @@ PiazzaRouter.route('/get-piazza').post(function (req, res) {
   var info = new PiazzaInfo(req.body);
   PiazzaInfo.find({userID: userID}, function(err, items) {
     if(err){
+
+      console.log('there is an error');
       console.log(err);
     }
     else {
@@ -62,6 +65,9 @@ PiazzaRouter.route('/get-piazza').post(function (req, res) {
           .then(function(user) {
             return res.json(user);
           })
+          .catch(function(err) {
+            return res.json(err)
+          })
         // return res.json(login(user, pass))
       }else {
         info.save()
@@ -69,6 +75,9 @@ PiazzaRouter.route('/get-piazza').post(function (req, res) {
           piazza.login(userID, pass)
             .then(function(user) {
               return res.json(user);
+            })
+            .catch(function(err) {
+              return res.json(err)
             })
           // return res.json(login(userID, pass))
         })
@@ -125,9 +134,6 @@ PiazzaRouter.route('/posts').post(function (req, res) {
   var currClass = info.currClass;
   var currFolder = info.currFolder;
 
-  console.log(currClass);
-  console.log(currFolder);
-
   piazza.login(userID, pass)
     .then(function(user) {
       var classArr = user.getClassesByRole('student');
@@ -145,6 +151,7 @@ PiazzaRouter.route('/posts').post(function (req, res) {
         .catch(err => console.log(err))
     })
   .catch(err => {
+    console.log('there is an error');
     console.log(err);
   });
 })

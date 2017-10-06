@@ -8,21 +8,13 @@ var PiazzaInfo = new Schema({
   userPassword: {
     type: String
   },
-  courseList: {
-    course: {
+  courseList: [
+    {
       id: String,
       name: String,
       courseNumber: String
     }
-  },
-  // display: {
-  //   courseName: {
-  //     type: String
-  //   },
-  //   courseFolder: {
-  //     type: String
-  //   }
-  // }
+  ]
 },{
     collection: 'piazzaInfo'
 })

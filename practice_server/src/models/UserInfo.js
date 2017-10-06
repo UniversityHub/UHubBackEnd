@@ -11,6 +11,14 @@ var UserInfo = new Schema({
   userPassword: {
     type: String
   },
+  apiLogin: {
+    type: Array,
+    api: {
+      name: String,
+      user: String,
+      pass: String
+    }
+  }
 },{
     collection: 'userInfos'
 })

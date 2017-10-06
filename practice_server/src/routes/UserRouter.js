@@ -13,6 +13,7 @@ var UserInfo = require('../models/UserInfo');
 // Defined store route
 UserRouter.route('/add/post').post(function (req, res) {
   var info = new UserInfo(req.body);
+  console.log(info);
       info.save()
     .then(info => {
       //var obj = {bool: true}
@@ -31,6 +32,23 @@ UserRouter.route('/authenticate-password').post(function (req, res) {
   var pass = info['userPassword'];
 
   if(user === '') user = '123';
+  UserInfo.find({ userID: user, userPassword: pass}, function (err, itms){
+    if(err){
+      console.log(err);
+    }
+    else {
+      res.json(itms);
+    }
+  });
+})
+
+// Retrieve list of APIs
+UserRouter.route('/get-apis').post(function (req, res) {
+  var info = req.body;
+  var user = info['userID'];
+  var pass = info['userPassword'];
+  console.log(info);
+
   UserInfo.find({ userID: user, userPassword: pass}, function (err, itms){
     if(err){
       console.log(err);
@@ -103,6 +121,27 @@ UserRouter.route('/revise-password').post(function (req, res) {
       console.log(err);
     }
     else {
+      res.json(itms);
+    }
+  });
+})
+
+// Update API list of specific USER
+UserRouter.route('/save-api').post(function (req, res) {
+  var info = req.body;
+  var user = info['userID'];
+  var pass = info['userPassword'];
+  var api = info['apiLogin'];
+
+  if(user === '') user = '123';
+  var query = {userID: user, userPassword: pass};
+
+  UserInfo.findOneAndUpdate(query, { apiLogin: api }, function (err, itms){
+    if(err){
+      console.log(err);
+    }
+    else {
+      console.log(itms);
       res.json(itms);
     }
   });
