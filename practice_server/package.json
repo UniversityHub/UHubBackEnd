@@ -1,0 +1,27 @@
+{
+  "name": "practice_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UniversityHub/UHubBackEnd.git"
+  },
+  "author": "Christian Concepcion",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UniversityHub/UHubBackEnd/issues"
+  },
+  "homepage": "https://github.com/UniversityHub/UHubBackEnd#readme",
+  "dependencies": {
+    "@microsoft/microsoft-graph-client": "^1.0.0",
+    "es6-promise": "^4.1.1",
+    "nodemailer": "^4.1.2",
+    "piazza-api": "^1.0.1",
+    "simple-oauth2": "^1.3.0"
+  }
+}

@@ -3,7 +3,9 @@ var app = express();
 var bodyParse = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
+var port = 8081;
 
+app.use(express.static('public'));
 app.use(bodyParse.urlencoded({extended : true}));
 app.use(bodyParse.json());
 var url = 'mongodb://cconcep:Republica1!@ds141454.mlab.com:41454/node_tutorial';
@@ -14,11 +16,13 @@ MongoClient.connect(url,function(err,db) {
   db.close();
 })
 
-var server = app.listen(8081, function() {    //when you first start the server?
-  var host = server.address().address
-  var port = server.address().port
 
-  console.log("Example app listening at http://%s:%s", host, port);
+
+app.listen(port, function() {    //when you first start the server?
+  // var host = server.address().address
+  // var port = server.address().port
+
+  console.log("Example app listening at" + port);
 })
 
 app.post('/sendLogin', function (req,res) {
