@@ -51,6 +51,9 @@ ToDoListRouter.route('/get-user-list').post(function (req, res) {
   });
 })
 
+//deletes a todo from the list
+ToDoListRouter.route('/')
+
 // Revise password of specific UserID
 ToDoListRouter.route('/add-entry').post(function (req, res) {
   var info = req.body;
