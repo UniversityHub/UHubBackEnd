@@ -143,12 +143,30 @@ PiazzaRouter.route('/posts').post(function (req, res) {
       })
       var classItem = user.getClassesByRole('student')[index];
 
-      classItem.filterByFolder(currFolder)
+      var allContent = classItem.filterByFolder(currFolder)
         .then(result => {
-          res.json(result);
+          var contents = result.map((feedItem, key) => {
+            return feedItem.toContent()
+          })
+          return Promise.all(contents);
         })
-        .then(parsedData => parsedData)
         .catch(err => console.log(err))
+
+      allContent.then(result => {
+        var cache = [];
+        var str = JSON.stringify(result, function(key, value) {
+            if (typeof value === 'object' && value !== null) {
+                if (cache.indexOf(value) !== -1) {
+                    // Circular reference found, discard key
+                    return;
+                }
+                // Store value in our collection
+                cache.push(value);
+            }
+            return value;
+        });
+        res.json(str);
+      })
     })
   .catch(err => {
     console.log('there is an error');
