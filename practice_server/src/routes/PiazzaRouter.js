@@ -9,12 +9,6 @@ var piazza = require('piazza-api');
 
 var PiazzaInfo = require('../models/PiazzaInfo');
 
-// function login(user, pass) {
-//   console.log('am i here');
-//   piazza.login(user, pass)
-//     .then(user => user)
-// }
-
 // Defined get data(index or listing) route
 PiazzaRouter.route('/').get(function (req, res) {
   PiazzaInfo.find(function (err, itms){
@@ -173,6 +167,41 @@ PiazzaRouter.route('/posts').post(function (req, res) {
     console.log(err);
   });
 })
+
+PiazzaRouter.route('/posts/question').post(function (req, res) {
+  var info = req.body;
+  var postObj = info['postObj'];
+  var username = info['username'];
+  var password = info['password'];
+  var classID = info['classID'];
+  var title = info['title'];
+  var content = info['content'];
+
+  piazza.login(username, password)
+    .then(function(user) {
+      user.postQuestion(classID, title, content, postObj)
+      .then(result => console.log(result));
+    })
+
+})
+
+PiazzaRouter.route('/posts/note').post(function (req, res) {
+  var info = req.body;
+  var postObj = info['postObj'];
+  var username = info['username'];
+  var password = info['password'];
+  var classID = info['classID'];
+  var title = info['title'];
+  var content = info['content'];
+
+  piazza.login(username, password)
+    .then(function(user) {
+      user.postNote(classID, title, content, postObj)
+      .then(result => console.log(result));
+    })
+
+})
+
 
 PiazzaRouter.route('/posts/answer').post(function (req, res) {
   var info = req.body;
