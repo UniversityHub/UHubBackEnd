@@ -2,7 +2,7 @@ var server = require('./server');
 var router = require('./router');
 var authHelper = require('./authHelper');
 var url = require('url');
-var microsoftGraph = require("@microsoft/microsoft-graph-client")
+var microsoftGraph = require("@microsoft/microsoft-graph-client");
 
 
 var handle = {};
@@ -147,7 +147,8 @@ function mail(response, request) {
             res.value.forEach(function(message) {
               console.log('  Subject: ' + message.subject);
               var from = message.from ? message.from.emailAddress.name : 'NONE';
-              response.write('<tr><td>' + from +
+              response.wr
+              ite('<tr><td>' + from +
                 '</td><td>' + (message.isRead ? '' : '<b>') + message.subject + (message.isRead ? '' : '</b>') +
                 '</td><td>' + message.receivedDateTime.toString() + '</td></tr>');
             });
@@ -202,6 +203,7 @@ client
           '</td><td>' + event.start.dateTime.toString() +
           '</td><td>' + event.end.dateTime.toString() + '</td></tr>');
       });
+
 
       response.write('</table>');
       response.end();

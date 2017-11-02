@@ -11,7 +11,7 @@ var credentials = {
 };
 var oauth2 = require('simple-oauth2').create(credentials);
 
-var redirectUri = 'http://localhost:8000/authorize';
+var redirectUri = 'http://localhost:4200/userinfos/test/office';
 
 // The scopes the app requires
 var scopes = [ 'openid',
