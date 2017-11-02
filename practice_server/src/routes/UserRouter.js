@@ -407,12 +407,12 @@ UserRouter.route('/save-api').post(function (req, res) {
   if(user === '') user = '123';
   var query = {userID: user, userPassword: pass};
 
+
   UserInfo.findOneAndUpdate(query, { apiLogin: api }, function (err, itms){
     if(err){
       console.log(err);
     }
     else {
-      console.log(itms);
       res.json(itms);
     }
   });
