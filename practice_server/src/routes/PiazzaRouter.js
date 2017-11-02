@@ -180,7 +180,10 @@ PiazzaRouter.route('/posts/question').post(function (req, res) {
   piazza.login(username, password)
     .then(function(user) {
       user.postQuestion(classID, title, content, postObj)
-      .then(result => console.log(result));
+      .then(result => {
+        console.log(result);
+        res.json(result);
+      });
     })
 
 })
@@ -197,7 +200,10 @@ PiazzaRouter.route('/posts/note').post(function (req, res) {
   piazza.login(username, password)
     .then(function(user) {
       user.postNote(classID, title, content, postObj)
-      .then(result => console.log(result));
+      then(result => {
+        console.log(result);
+        res.json(result);
+      });
     })
 
 })
