@@ -37,3 +37,10 @@ https://docs.mongodb.com/getting-started/node/client/
 Insert into DB:
 https://docs.mongodb.com/getting-started/node/insert/
 
+////////////
+//MAIL API//
+////////////
+
+Making Nodejs API call:
+https://docs.microsoft.com/en-us/outlook/rest/node-tutorial
+
