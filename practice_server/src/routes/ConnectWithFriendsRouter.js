@@ -31,6 +31,33 @@ ConnectRouter.route('/').get(function (req, res) {
   });
 });
 
+//gets all users
+ConnectRouter.route('/all').post(function (req, res) {
+  Connect.find({}, function (err, tasks){
+    if(err){
+      console.log(err);
+    }
+    else {
+      console.log(tasks);
+      res.json(tasks);
+    }
+  });
+});
+
+// Retrieve list of friends
+ConnectRouter.route('/friends').post(function (req, res) {
+  var info = req.body;
+  var user = info['userID'];
+
+  Connect.find({ userID: user}, function (err, itms){
+    if(err){
+      console.log(err);
+    }
+    else {
+      res.json(itms);
+    }
+  });
+})
 
 //find user and connect and save to freinds list
 ConnectRouter.route('/add-friend').post(function (req, res) {

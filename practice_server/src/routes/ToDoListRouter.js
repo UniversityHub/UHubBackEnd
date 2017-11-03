@@ -35,6 +35,21 @@ ToDoListRouter.route('/').get(function (req, res) {
   });
 });
 
+// Retrieve list of entries for a user
+ToDoListRouter.route('/entries').post(function (req, res) {
+  var info = req.body;
+  var user = info['userID'];
+
+  ToDoList.find({ userID: user}, function (err, itms){
+    if(err){
+      console.log(err);
+    }
+    else {
+      res.json(itms);
+    }
+  });
+})
+
 //find task and save and update
 ToDoListRouter.route('/add-entry').post(function (req, res) {
   var info = req.body;
