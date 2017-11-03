@@ -32,6 +32,23 @@ var scopes = [ 'openid',
                'Calendars.Read',
                'Mail.Read' ];
 
+//this function is to start the authorization, will route to the authorizeURL
+function startAuth(response, request) {
+  console.log('startAuth was called.');
+  response.writeHead(302, {Location: authHelper.getAuthUrl()})
+  //response.writeHead(200, {'Content-Type': 'text/html'});
+  //response.write('<p>Please <a href="' + authHelper.getAuthUrl() + '">sign in</a> with your Office 365 or Outlook.com account.</p>');
+  response.end();
+  //window.location.href(authHelper.getAuthUrl());
+}
+
+UserRouter.route('/test/start').get(function (req, res) {
+  console.log('startAuth was called.');
+  res.writeHead(302, {Location: getAuthUrl()})
+  //response.writeHead(200, {'Content-Type': 'text/html'});
+  //response.write('<p>Please <a href="' + authHelper.getAuthUrl() + '">sign in</a> with your Office 365 or Outlook.com account.</p>');
+  res.end();
+});
 
 UserRouter.route('/test/office').get(function (req, res) {
   console.log("got this shit yo");
@@ -45,6 +62,7 @@ UserRouter.route('/test/office').get(function (req, res) {
 
 });
 
+//this is where it returns to:
 UserRouter.route('/test/mail').get(function (request, response) {
   getAccessToken(request, response, function(error, token) {
     console.log('Token found in cookie: ', token);
@@ -307,6 +325,7 @@ UserRouter.route('/authenticate-password').post(function (req, res) {
     if(err){
       console.log(err);
     }
+
     else {
       res.json(itms);
     }
