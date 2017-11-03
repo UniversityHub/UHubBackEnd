@@ -11,6 +11,12 @@ var UserInfo = new Schema({
   userPassword: {
     type: String
   },
+  firstName: {
+    type: String
+  },
+  lastName: {
+    type: String
+  },
   apiLogin: {
     type: Array,
     api: {

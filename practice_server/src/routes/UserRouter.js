@@ -448,6 +448,22 @@ UserRouter.route('/revise-password').post(function (req, res) {
   });
 })
 
+// Retrieve password of specific UserID
+UserRouter.route('/getPassword').post(function (req, res) {
+  var info = req.body;
+  var user = info['userID'];
+  var query = {userID: user};
+
+  UserInfo.find(query, function (err, itms){
+    if(err){
+      console.log(err);
+    }
+    else {
+      res.json(itms);
+    }
+  });
+})
+
 // Update API list of specific USER
 UserRouter.route('/save-api').post(function (req, res) {
   var info = req.body;

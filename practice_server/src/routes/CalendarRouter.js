@@ -23,7 +23,7 @@ CalendarRouter.route('/').get(function (req, res) {
 
 // Defined store route
 CalendarRouter.route('/initialize').post(function (req, res) {
-  var info = new UserInfo(req.body);
+  var info = new CalendarInfo(req.body);
       info.save()
     .then(info => {
       res.json('CalendarInfo added successfully');
