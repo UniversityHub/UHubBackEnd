@@ -6,10 +6,16 @@ var ToDoList = new Schema({
     type: String
   },
   items: {
-    type: Array
-  },
+    type: Array,
+    item: String
+  }
 },{
     collection: 'todoList'
 })
 
 module.exports = mongoose.model('ToDoList', ToDoList);
+
+/*module.exports = mongoose.model('Todo', {
+  text : String,
+  done : Boolean
+});*/
