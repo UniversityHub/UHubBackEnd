@@ -158,8 +158,7 @@ function mail(response, request) {
             res.value.forEach(function(message) {
               console.log('  Subject: ' + message.subject);
               var from = message.from ? message.from.emailAddress.name : 'NONE';
-              response.wr
-              ite('<tr><td>' + from +
+              response.write('<tr><td>' + from +
                 '</td><td>' + (message.isRead ? '' : '<b>') + message.subject + (message.isRead ? '' : '</b>') +
                 '</td><td>' + message.receivedDateTime.toString() + '</td></tr>');
             });
