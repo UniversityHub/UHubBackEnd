@@ -9,12 +9,6 @@ var piazza = require('piazza-api');
 
 var PiazzaInfo = require('../models/PiazzaInfo');
 
-// function login(user, pass) {
-//   console.log('am i here');
-//   piazza.login(user, pass)
-//     .then(user => user)
-// }
-
 // Defined get data(index or listing) route
 PiazzaRouter.route('/').get(function (req, res) {
   PiazzaInfo.find(function (err, itms){
@@ -143,17 +137,146 @@ PiazzaRouter.route('/posts').post(function (req, res) {
       })
       var classItem = user.getClassesByRole('student')[index];
 
-      classItem.filterByFolder(currFolder)
+      var allContent = classItem.filterByFolder(currFolder)
         .then(result => {
-          res.json(result);
+          var contents = result.map((feedItem, key) => {
+            return feedItem.toContent()
+          })
+          return Promise.all(contents);
         })
-        .then(parsedData => parsedData)
         .catch(err => console.log(err))
+
+      allContent.then(result => {
+        var cache = [];
+        var str = JSON.stringify(result, function(key, value) {
+            if (typeof value === 'object' && value !== null) {
+                if (cache.indexOf(value) !== -1) {
+                    // Circular reference found, discard key
+                    return;
+                }
+                // Store value in our collection
+                cache.push(value);
+            }
+            return value;
+        });
+        res.json(str);
+      })
     })
   .catch(err => {
     console.log('there is an error');
     console.log(err);
   });
+})
+
+PiazzaRouter.route('/posts/question').post(function (req, res) {
+  var info = req.body;
+  var postObj = info['postObj'];
+  var username = info['username'];
+  var password = info['password'];
+  var classID = info['classID'];
+  var title = info['title'];
+  var content = info['content'];
+
+  piazza.login(username, password)
+    .then(function(user) {
+      user.postQuestion(classID, title, content, postObj)
+      .then(result => {
+        console.log(result);
+        res.json(result);
+      });
+    })
+
+})
+
+PiazzaRouter.route('/posts/note').post(function (req, res) {
+  var info = req.body;
+  var postObj = info['postObj'];
+  var username = info['username'];
+  var password = info['password'];
+  var classID = info['classID'];
+  var title = info['title'];
+  var content = info['content'];
+
+  piazza.login(username, password)
+    .then(function(user) {
+      user.postNote(classID, title, content, postObj)
+      then(result => {
+        console.log(result);
+        res.json(result);
+      });
+    })
+
+})
+
+
+PiazzaRouter.route('/posts/answer').post(function (req, res) {
+  var info = req.body;
+  var postObj = info['postObj'];
+  var answer = info['answer'];
+
+  var username = postObj.user;
+  var password = postObj.password;
+
+  console.log(username);
+  console.log(password);
+
+  piazza.login(username, password)
+    .then(function(user) {
+      var classItem = user.getClassByID(postObj.classID);
+
+      var allContent = classItem.filterByFolder(postObj.folders[0])
+        .then(result => {
+          /*var contents = */result.map((feedItem, key) => {
+            /*return*/ feedItem.toContent()
+              .then(result2 => {
+                  var cache = [];
+                  var str = JSON.stringify(result2, function(key, value) {
+                    if (typeof value === 'object' && value !== null) {
+                      if (cache.indexOf(value) !== -1) {
+                        // Circular reference found, discard key
+                        return;
+                      }
+                      // Store value in our collection
+                      cache.push(value);
+                    }
+                    return value;
+                  });
+                  if(result2.id === postObj.id) {
+                    // console.log(JSON.parse(str))
+                    user.answerQuestion(JSON.parse(str), answer, {anonymous: "full"})
+                      .then(result => res.json(result))
+                      .catch(err => console.log(err))
+                    return;
+                  }
+
+              })
+          })
+          //return Promise.all(contents);
+        })
+        .catch(err => console.log(err))
+
+      // allContent.then(result => {
+      //   var str = JSON.stringify(result, function(key, value) {
+      //       if (typeof value === 'object' && value !== null) {
+      //           if (cache.indexOf(value) !== -1) {
+      //               // Circular reference found, discard key
+      //               return;
+      //           }
+      //           // Store value in our collection
+      //           cache.push(value);
+      //       }
+      //       return value;
+      //   });
+      //   console.log(str);
+
+      // })
+
+
+    })
+    .catch(err => {
+      console.log('there is a login error');
+      console.log(err);
+    });
 })
 
 module.exports = PiazzaRouter;

@@ -20,7 +20,9 @@ mongoose.connect(url)
 var UserRouter = require('./src/routes/UserRouter');
 var ToDoListRouter = require('./src/routes/ToDoListRouter');
 var PiazzaRouter = require('./src/routes/PiazzaRouter');
+var CalendarRouter = require('./src/routes/CalendarRouter');
 var EmailRouter = require('./src/routes/EmailRouter');
+//var OutlookRouter = require('./src/routes/OutlookRouter');
 
 
 // Use middlewares to set view engine and post json data to the server
@@ -32,6 +34,8 @@ app.use(bodyParser.json());
 app.use('/userInfos', UserRouter);
 app.use('/todoList', ToDoListRouter);
 app.use('/piazza', PiazzaRouter);
+app.use('/calendar', CalendarRouter);
+//app.use('/outlook', OutlookRouter);
 
 
 app.listen(port, function(){
