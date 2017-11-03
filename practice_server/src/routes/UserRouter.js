@@ -7,9 +7,10 @@ var cors = require('cors');
 var url = 'mongodb://cconcep:Republica1!@ds141454.mlab.com:41454/node_tutorial'
 var UserRouter = express.Router();
 
-//
-//BEGIN SECTION FOR OUTLOOK API STUFF
-//
+
+///////////////////////////////////////
+//BEGIN SECTION FOR OUTLOOK API STUFF//
+///////////////////////////////////////
 
 var credentials = {
   client: {
@@ -42,6 +43,10 @@ function startAuth(response, request) {
   //window.location.href(authHelper.getAuthUrl());
 }
 
+//use this URL to start the process
+//in the frontend, we should just make this a function
+//that is called when you press the button to go to
+//the mail page
 UserRouter.route('/test/start').get(function (req, res) {
   console.log('startAuth was called.');
   res.writeHead(302, {Location: getAuthUrl()})
@@ -50,6 +55,10 @@ UserRouter.route('/test/start').get(function (req, res) {
   res.end();
 });
 
+//this is where the office login pages returns you to.
+//you decide this URL in the outlook API page online.
+//but you also gotta make sure it matches up with a
+//couple other lines of code here
 UserRouter.route('/test/office').get(function (req, res) {
   console.log("got this shit yo");
 
@@ -62,7 +71,10 @@ UserRouter.route('/test/office').get(function (req, res) {
 
 });
 
-//this is where it returns to:
+//after it returns to /test/office, it eventually gets routed to
+//here, which is what actually uses the api. In the frontend,
+//it would probably be best if this is just a function that
+//we could call instead of actually routing.
 UserRouter.route('/test/mail').get(function (request, response) {
   getAccessToken(request, response, function(error, token) {
     console.log('Token found in cookie: ', token);
@@ -115,15 +127,10 @@ UserRouter.route('/test/mail').get(function (request, response) {
   });
 });
 
-function authorize(response, request) {
-  console.log('Request handler \'authorize\' was called.');
-  // The authorization code is passed as a query parameter
-  var url_parts = url.parse(request.url, true);
-  var code = url_parts.query.code;
-  console.log('Code: ' + code);
-  getTokenFromCode(code, tokenReceived, response);
-}
-
+//this is a helper function
+//it is here to safe the users email for
+//making it easier to do some of the
+//functionalities (not sure which)
 function getUserEmail(token, callback) {
   // Create a Graph client
   var client = microsoftGraph.Client.init({
@@ -145,6 +152,12 @@ function getUserEmail(token, callback) {
     });
 }
 
+//this is a helper function
+//get the tokens that you receive so that they
+//are saved in the browser so that it can stay
+//logged in.
+//This is the function that will end up calling
+//the mail route/function.
 function tokenReceived(response, error, token) {
   if (error) {
     console.log('Access token error: ', error.message);
@@ -164,12 +177,17 @@ function tokenReceived(response, error, token) {
                        'node-tutorial-email=' + email + ';Max-Age=4000'];
         response.setHeader('Set-Cookie', cookies);
         response.writeHead(302, {'Location': 'http://localhost:4200/userinfos/test/mail'});
+        //response.writeHead(200);
+        //mail(response);
         response.end();
       }
     });
   }
 }
 
+//this is a helper function
+//retreive the information from you cookies,
+//which is the saved tokens for staying logged in
 function getValueFromCookie(valueName, cookie) {
   if (cookie.indexOf(valueName) !== -1) {
     var start = cookie.indexOf(valueName) + valueName.length + 1;
@@ -179,6 +197,9 @@ function getValueFromCookie(valueName, cookie) {
   }
 }
 
+//this is a helper function
+//inteded to refresh your tokens when they get too
+//old, so that you can stay logged in forever.
 function getAccessToken(request, response, callback) {
   var expiration = new Date(parseFloat(getValueFromCookie('node-tutorial-token-expires', request.headers.cookie)));
 
@@ -204,6 +225,9 @@ function getAccessToken(request, response, callback) {
   }
 }
 
+//this is the function form of the mail printing.
+//gotta figure out how to do this, hopefully the
+//syntax n shit is the same.
 function mail(response, request) {
   getAccessToken(request, response, function(error, token) {
     console.log('Token found in cookie: ', token);
@@ -257,6 +281,10 @@ function mail(response, request) {
   });
 }
 
+//this is a helper function
+//just gets a specific URL
+//that is necessary for
+//oAuth2, which changes
 function getAuthUrl() {
   var returnVal = oauth2.authorizationCode.authorizeURL({
     redirect_uri: redirectUri,
@@ -266,6 +294,9 @@ function getAuthUrl() {
   return returnVal;
 }
 
+//this is a helper function
+//parse up the code so that it's ready to be used by
+//the refreshtoken shit and stuff like that, i think.
 function getTokenFromCode(auth_code, callback, response) {
   var token;
   oauth2.authorizationCode.getToken({
@@ -284,15 +315,16 @@ function getTokenFromCode(auth_code, callback, response) {
   });
 }
 
+//this is a helper function
+//just gets a new token, I believe.
 function refreshAccessToken(refreshToken, callback) {
   var tokenObj = oauth2.accessToken.create({refresh_token: refreshToken});
   tokenObj.refresh(callback);
 }
 
-
-//
-//END SECTION FOR OUTLOOK API STUFF
-//
+/////////////////////////////////////
+//END SECTION FOR OUTLOOK API STUFF//
+/////////////////////////////////////
 
 
 
