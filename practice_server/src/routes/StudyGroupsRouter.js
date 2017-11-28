@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var port = 4200;
 var cors = require('cors');
 var ConnectRouter = express.Router();
-var Connect = require('../models/ConnectWithFriends');
+var Connect = require('../models/studyGroup');
 
 //initialize
 ConnectRouter.route('/initialize').post(function (req, res) {

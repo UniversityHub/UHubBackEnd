@@ -10,7 +10,7 @@ var Connect = new Schema({
     friend: String
   }
 },{
-    collection: 'friendInfo'
+    collection: 'groupInfo'
 })
 
 module.exports = mongoose.model('Connect', Connect);
