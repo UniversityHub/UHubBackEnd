@@ -6,6 +6,7 @@ var port = 4200;
 var cors = require('cors');
 var url = 'mongodb://cconcep:Republica1!@ds141454.mlab.com:41454/node_tutorial'
 var UserRouter = express.Router();
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 
 ///////////////////////////////////////
@@ -33,10 +34,56 @@ var scopes = [ 'openid',
                'Calendars.Read',
                'Mail.Read' ];
 
+//                // Create the XHR object.
+// function createCORSRequest(method, url) {
+//   var xhr = new XMLHttpRequest();
+//   if ("withCredentials" in xhr) {
+//     // XHR for Chrome/Firefox/Opera/Safari.
+//     xhr.open(method, url, true);
+//   } else if (typeof XDomainRequest != "undefined") {
+//     // XDomainRequest for IE.
+//     xhr = new XDomainRequest();
+//     xhr.open(method, url);
+//   } else {
+//     // CORS not supported.
+//     xhr = null;
+//   }
+//   return xhr;
+// }
+//
+// // Helper method to parse the title tag from the response.
+// function getTitle(text) {
+//   return text.match('<title>(.*)?</title>')[1];
+// }
+//
+// // Make the actual CORS request.
+// function makeCorsRequest() {
+//   // This is a sample server that supports CORS.
+//
+  // var xhr = createCORSRequest('GET', url);
+  // if (!xhr) {
+  //   console.log('CORS not supported');
+  //   return;
+  // }
+  //
+  // // Response handlers.
+  // xhr.onload = function() {
+  //   var text = xhr.responseText;
+  //   var title = getTitle(text);
+  //   console.log('Response from CORS request to ' + url + ': ' + title);
+  // };
+  //
+  // xhr.onerror = function() {
+  //   console.log('Woops, there was an error making the request.');
+  // };
+  // // xhr.setRequestHeader('200', {"Content-Type": "text/css"});
+  // xhr.send();
+// }
+
 //this function is to start the authorization, will route to the authorizeURL
 function startAuth(response, request) {
   console.log('startAuth was called.');
-  response.writeHead(302, {Location: authHelper.getAuthUrl()})
+  response.writeHead(302, {Location: getAuthUrl()})
   //response.writeHead(200, {'Content-Type': 'text/html'});
   //response.write('<p>Please <a href="' + authHelper.getAuthUrl() + '">sign in</a> with your Office 365 or Outlook.com account.</p>');
   response.end();

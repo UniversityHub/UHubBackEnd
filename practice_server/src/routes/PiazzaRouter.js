@@ -226,31 +226,44 @@ PiazzaRouter.route('/posts/answer').post(function (req, res) {
 
       var allContent = classItem.filterByFolder(postObj.folders[0])
         .then(result => {
-          /*var contents = */result.map((feedItem, key) => {
-            /*return*/ feedItem.toContent()
-              .then(result2 => {
-                  var cache = [];
-                  var str = JSON.stringify(result2, function(key, value) {
-                    if (typeof value === 'object' && value !== null) {
-                      if (cache.indexOf(value) !== -1) {
-                        // Circular reference found, discard key
-                        return;
-                      }
-                      // Store value in our collection
-                      cache.push(value);
-                    }
-                    return value;
-                  });
-                  if(result2.id === postObj.id) {
-                    // console.log(JSON.parse(str))
-                    user.answerQuestion(JSON.parse(str), answer, {anonymous: "full"})
-                      .then(result => res.json(result))
-                      .catch(err => console.log(err))
-                    return;
-                  }
+          var initQ = result.find(elem => {
+                return elem.id === postObj.id;
+            })
+            initQ.toContent().then(question => {
+                //console.log(question);
+                const obj = {
+                    anonymous: "full"
+                }
+                user.answerQuestion(question, answer, obj).then(postAns => {
+                    console.log(postAns);
+                })
+            })
 
-              })
-          })
+          // /*var contents = */result.map((feedItem, key) => {
+          //   /*return*/ feedItem.toContent()
+          //     .then(result2 => {
+          //         var cache = [];
+          //         var str = JSON.stringify(result2, function(key, value) {
+          //           if (typeof value === 'object' && value !== null) {
+          //             if (cache.indexOf(value) !== -1) {
+          //               // Circular reference found, discard key
+          //               return;
+          //             }
+          //             // Store value in our collection
+          //             cache.push(value);
+          //           }
+          //           return value;
+          //         });
+          //         if(result2.id === postObj.id) {
+          //           // console.log(JSON.parse(str))
+          //           user.answerQuestion(JSON.parse(str), answer, {anonymous: "full"})
+          //             .then(result => res.json(result))
+          //             .catch(err => console.log(err))
+          //           return;
+          //         }
+          //
+          //     })
+          // })
           //return Promise.all(contents);
         })
         .catch(err => console.log(err))
