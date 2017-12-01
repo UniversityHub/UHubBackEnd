@@ -44,3 +44,34 @@ https://docs.mongodb.com/getting-started/node/insert/
 Making Nodejs API call:
 https://docs.microsoft.com/en-us/outlook/rest/node-tutorial
 
+//////////
+//HEROKU//
+//////////
+
+How to set up (theoretically):
+1. Download Heroku CLI
+  https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up
+2. login in shell
+2.5 OPTIONAL: check versions of node, npm, and git
+3. remove the following lines from .gitignore:
+    public/*
+    static/dist
+    static/css/app.min.css
+4. Change the "entry" line of webpack.config.prod:
+    entry: ['babel-polyfill', __dirname + "/client/index.js"] ,
+5.In package.json copy ALL devDependencies to the normal dependencies tree
+6.In package.json change the "start" script to:
+    "start": "cross-env NODE_ENV=production MONGO_URL=yourMongoURL node index.js",
+6.5 IF USING NODEMON: in the "start" script, change to:
+    "start": "node server/server.js"
+6.75 POSSIBLY NEED TO CHANGE LISTENING PORT? In package.json:
+    app.listen(process.env.PORT || 8080, function() {
+7. Create minified version with "npm run build"
+8. "git add ."
+9. "git commit -m 'heroku prep'"
+10. "git push heroku master"
+
+*run "heroku create" to first start
+*to deploy code: "git push heroku master"
+*to easily open page: "heroku open"
+
