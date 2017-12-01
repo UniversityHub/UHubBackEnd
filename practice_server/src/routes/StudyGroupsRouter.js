@@ -49,7 +49,7 @@ GroupsRouter.route('/friends').post(function (req, res) {
   var info = req.body;
   var user = info['userID'];
 
-  Connect.find({ userID: user}, function (err, itms){
+  Groups.find({ userID: user}, function (err, itms){
     if(err){
       console.log(err);
     }
