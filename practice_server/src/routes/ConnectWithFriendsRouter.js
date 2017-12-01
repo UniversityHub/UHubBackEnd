@@ -64,6 +64,7 @@ ConnectRouter.route('/add-friend').post(function (req, res) {
   var info = req.body;
   var user = info['userID'];
   var friends = info['friends'];
+  var friend = info['friend'];
 
   var query = {userID: user};
   Connect.findOneAndUpdate(query, { friends: friends }, function (err, frnds){
@@ -71,7 +72,26 @@ ConnectRouter.route('/add-friend').post(function (req, res) {
       console.log(err);
     }
     else {
-      console.log(frnds);
+      var friendQuery = {userID: friend};
+      Connect.findOne(friendQuery, function (err, result){
+        if(err){
+          console.log(err);
+        }
+        else {
+            console.log(result);
+            let friendFriends = result.friends;
+            friendFriends.push(user);
+            Connect.findOneAndUpdate(friendQuery, { friends: friendFriends }, function (err, final){
+              if(err){
+                console.log(err);
+              }
+              else {
+                console.log("successful friends");
+              }
+            })
+        }
+      })
+      //console.log(frnds);
       res.json(frnds);
     }
   });
